@@ -8,7 +8,7 @@ import (
 	"go.opentelemetry.io/otel/exporters/jaeger"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/sdk/resource"
-	"go.opentelemetry.io/otel/sdk/trace"
+	trace "go.opentelemetry.io/otel/sdk/trace"
 	semconv "go.opentelemetry.io/otel/semconv/v1.21.0"
 )
 
@@ -72,13 +72,10 @@ func newPropagator() propagation.TextMapPropagator {
 	)
 }
 
-
-
 func newTraceProvider(res *resource.Resource) (*trace.TracerProvider, error) {
-	var JaegerCollectorURL = "http://localhost:14268/api/traces"
-	//var JaegerCollectorURL = "http://otel_collector:14278/api/traces"
-	//var OtelCollectorURL = "http://otel_collector:14278/api/traces"
-	exporter, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(JaegerCollectorURL)))
+	var OtelCollectorURL = "http://localhost:14278/api/traces"
+	// <注意>2023年7月にjaegerのサポートを停止して、otlptracehttpを使うように推奨されている
+	exporter, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(OtelCollectorURL)))
 	if err != nil {
 		return nil, err
 	}
